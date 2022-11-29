@@ -1,0 +1,52 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table id="tblCourse" class="table">
+    <thead>
+        <tr>
+            <th>Sr No</th>
+            <th>Course</th>
+            <th>Duration</th>
+        </tr>
+    </thead>
+</table>
+@section myDataTable{
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script>
+			$(document).ready(function(){
+				$('#tblCourse').DataTable({
+					"processing":true,
+					"serverSide":true,
+					"filter":false,
+					"paging":false,
+					"responsive":true,
+					"ajax":{
+						"url":"@Url.Action("LoadData")",
+						"datatype":"json",
+						"type":"POST"
+					},
+		
+					"columnDefs":[
+					{"width": "20%","targets":0,"orderable":false},
+					{"width": "40%","targets":1,"orderable":false},
+					{"width": "40%","targets":2,"orderable":false}
+					],
+
+					"columns":[
+					{"data":"CourseID", "name": "CID"},
+					{"data":"CourseName", "name": "CName"},
+					{"data":"Duration", "name": "CDuration"},
+					]
+				}
+				);
+			});
+
+    </script>
+}
+
+
