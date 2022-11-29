@@ -22,9 +22,10 @@
 				$('#tblCourse').DataTable({
 					"processing":true,
 					"serverSide":true,
-					"filter":false,
-					"paging":false,
-					"responsive":true,
+					"filter":true,
+					"paging":true,
+					"responsive": true,
+					"order": [[1,'asc']],
 					"ajax":{
 						"url":"@Url.Action("LoadData")",
 						"datatype":"json",
@@ -32,9 +33,9 @@
 					},
 		
 					"columnDefs":[
-					{"width": "20%","targets":0,"orderable":false},
-					{"width": "40%","targets":1,"orderable":false},
-					{"width": "40%","targets":2,"orderable":false}
+					{"width": "20%","targets":0,"orderable":true},
+                        { "width": "40%", "targets": 1, "orderable": true },
+                        { "width": "40%", "targets": 2, "orderable": true }
 					],
 
 					"columns":[
