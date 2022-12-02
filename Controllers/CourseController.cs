@@ -34,19 +34,21 @@ namespace DataTableJquery.Controllers
             string start = Request.Form.GetValues("start").FirstOrDefault();
 
             int pagesize = legth != null ? Convert.ToInt32(legth) : 0;
-            int skiprecords = start != null ? Convert.ToInt32(start) : 0;   
-
+            int skiprecords = start != null ? Convert.ToInt32(start) : 0;
+            int totalRec;
 
             IEnumerable<Course> courses = GetCourses(searchString, sortColumn,sortDirection, pagesize,
-                skiprecords);
-            var json = Json(new { data = courses, recordsFiltered = courses.Count(), recordsTotal = courses.Count() });
+                skiprecords, out totalRec);
+            var json = Json(new { data = courses, recordsFiltered = totalRec, recordsTotal = totalRec });
             return json;
         }
 
 
 
-        private IEnumerable<Course> GetCourses(string searchString, string sortcol,string sortDir, int pageSize, int skipRecords)
+        private IEnumerable<Course> GetCourses(string searchString, string sortcol,string sortDir, int pageSize, int skipRecords, out int totalRec)
         {
+          
+
             List<Course> courses = new List<Course>()
             {
 
@@ -79,8 +81,12 @@ namespace DataTableJquery.Controllers
                         new Course(){CourseID=33, CourseName= "data scructure", Duration = "2 moths"},
 
             };
+        
             courses = courses.Where(x => x.CourseName.ToUpper().Contains(searchString.ToUpper()) ||
             x.Duration.Contains(searchString)).ToList();
+
+            totalRec = courses.Count();
+
             switch (sortcol)
             {
                 case "CID":
@@ -96,7 +102,7 @@ namespace DataTableJquery.Controllers
                     courses.OrderByDescending(x => x.Duration)).ToList();
                     break;
             }
-            courses = courses.Skip(skipRecords).Take(skipRecords).ToList();
+            courses = courses.Skip(skipRecords).Take(pageSize).ToList();
 
 
 
